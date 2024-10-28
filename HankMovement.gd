@@ -7,7 +7,8 @@ const JUMP_VELOCITY = 4.5
 @onready var camera = $Head/FPSCam;
 
 func _ready():
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;  
+	# Video'da farklı bir kod kullanıyor fakat ileriki versiyonlarında artık bu kod kullanılıyor.
 	
 	
 func _physics_process(delta: float) -> void:
