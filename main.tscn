@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bsrnjoc0qrkuv"]
+[gd_scene load_steps=10 format=3 uid="uid://bsrnjoc0qrkuv"]
 
 [ext_resource type="Script" path="res://HankMovement.gd" id="1_wjv42"]
 
@@ -18,7 +18,11 @@ glow_enabled = true
 [sub_resource type="BoxShape3D" id="BoxShape3D_30qic"]
 size = Vector3(60, 2, 60)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ffcxt"]
+albedo_color = Color(0.698346, 0.625147, 0.427732, 1)
+
 [sub_resource type="BoxMesh" id="BoxMesh_81bhi"]
+material = SubResource("StandardMaterial3D_ffcxt")
 size = Vector3(60, 2, 60)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_oa6ub"]
