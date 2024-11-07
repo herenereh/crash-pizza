@@ -5,12 +5,18 @@ const JUMP_VELOCITY = 4.5
 const SENSITIVITY = 0.002
 const DASH_VELOCITY = 400
 var JUMP_COUNT = 2
+var WALL_INTERACTION = 1
 
 var SIDEWAYS_TILT = 0.0
 var NORMAL_TILT = 0.0
 
+var CURRENT_STATE = PlayerState.WalkingState
+
 @onready var head = $Head;
 @onready var camera = $Head/FPSCam;
+
+enum PlayerState { WalkingState, RunningState, MidAirState, DashState, OnWallState}
+
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;  
@@ -33,9 +39,17 @@ func _unhandled_input(event):
 			
 			
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
+	
+	if is_on_wall() and not is_on_floor() and WALL_INTERACTION > 0:
+		head.rotation.z = lerp(head.rotation.z, 0.5, 0.1)
+		if Input.is_action_just_pressed("Jump"):
+			WALL_INTERACTION = 0;
+			JUMP_COUNT += JUMP_COUNT
+			velocity.y = JUMP_VELOCITY * 2
+			
+			
+			
 	if not is_on_floor() :
-		
 		velocity += get_gravity() * delta
 		
 
@@ -43,10 +57,11 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("Jump") and JUMP_COUNT > 1 :
 		
 		velocity.y = JUMP_VELOCITY
-		JUMP_COUNT = JUMP_COUNT - 1
+		JUMP_COUNT -= JUMP_COUNT
 		
 	if is_on_floor():
 		JUMP_COUNT = 2
+		WALL_INTERACTION = 1;
 		
 	# Dash mechanic
 	#if Input.is_action_just_pressed("Dash"):
@@ -73,3 +88,4 @@ func _physics_process(delta: float) -> void:
 		SIDEWAYS_TILT = 0.0
 		
 	move_and_slide()
+	
