@@ -45,7 +45,7 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_just_pressed("Jump"):
 			WALL_INTERACTION = 0;
 			JUMP_COUNT += JUMP_COUNT
-			velocity.y = JUMP_VELOCITY * 2
+			velocity.y = JUMP_VELOCITY * 100
 			
 			
 			
