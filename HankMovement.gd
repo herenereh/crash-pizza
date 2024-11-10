@@ -6,17 +6,33 @@ const SENSITIVITY = 0.002
 const DASH_VELOCITY = 400
 var JUMP_COUNT = 2
 var WALL_INTERACTION = 1
+var WALL_DETECTION = 1
 
 var SIDEWAYS_TILT = 0.0
 var NORMAL_TILT = 0.0
+var WALL_TILT = 0.5
 
 var CURRENT_STATE = PlayerState.WalkingState
 
+@onready var LEFT_RAYCAST = $LeftRaycast;
+@onready var RIGHT_RAYCAST = $RightRaycast;
 @onready var head = $Head;
 @onready var camera = $Head/FPSCam;
 
+
+
 enum PlayerState { WalkingState, RunningState, MidAirState, DashState, OnWallState}
 
+func wall_detecion():
+	
+	RIGHT_RAYCAST.target_position = head.transform.basis.x.normalized() * WALL_DETECTION
+	LEFT_RAYCAST.target_position = (-head.transform.basis.x).normalized() * WALL_DETECTION
+	LEFT_RAYCAST.enabled = true
+	RIGHT_RAYCAST.enabled = true
+	if (RIGHT_RAYCAST.is_colliding()):
+		head.rotation.z = lerp(head.rotation.z, WALL_TILT, 0.1)
+	else:
+		head.rotation.z = lerp(head.rotation.z, -WALL_TILT, 0.1)	
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;  
@@ -41,11 +57,11 @@ func _unhandled_input(event):
 func _physics_process(delta: float) -> void:
 	
 	if is_on_wall() and not is_on_floor() and WALL_INTERACTION > 0:
-		head.rotation.z = lerp(head.rotation.z, 0.5, 0.1)
+		wall_detecion()
 		if Input.is_action_just_pressed("Jump"):
 			WALL_INTERACTION = 0;
 			JUMP_COUNT += JUMP_COUNT
-			velocity.y = JUMP_VELOCITY * 100
+			velocity.y = JUMP_VELOCITY * 2
 			
 			
 			
@@ -88,4 +104,3 @@ func _physics_process(delta: float) -> void:
 		SIDEWAYS_TILT = 0.0
 		
 	move_and_slide()
-	
