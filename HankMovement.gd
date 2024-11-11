@@ -4,13 +4,13 @@ const SPEED = 8.0
 const JUMP_VELOCITY = 4.5
 const SENSITIVITY = 0.002
 const DASH_VELOCITY = 400
+const WALL_TILT = 0.5
 var JUMP_COUNT = 2
 var WALL_INTERACTION = 1
 var WALL_DETECTION = 1
 
 var SIDEWAYS_TILT = 0.0
 var NORMAL_TILT = 0.0
-var WALL_TILT = 0.5
 
 var CURRENT_STATE = PlayerState.WalkingState
 
