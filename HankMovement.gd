@@ -5,9 +5,12 @@ const JUMP_VELOCITY = 4.5
 const SENSITIVITY = 0.002
 const DASH_VELOCITY = 400
 const WALL_TILT = 0.5
+
 var JUMP_COUNT = 2
 var WALL_INTERACTION = 1
 var WALL_DETECTION = 1
+var EXTRA_VELOCITY = Vector3.ZERO
+
 
 var SIDEWAYS_TILT = 0.0
 var NORMAL_TILT = 0.0
@@ -18,10 +21,11 @@ var CURRENT_STATE = PlayerState.WalkingState
 @onready var RIGHT_RAYCAST = $RightRaycast;
 @onready var head = $Head;
 @onready var camera = $Head/FPSCam;
-
+@onready var dash = $ForwardRaycast;
 
 
 enum PlayerState { WalkingState, RunningState, MidAirState, DashState, OnWallState}
+
 
 func wall_detecion():
 	
@@ -30,9 +34,9 @@ func wall_detecion():
 	LEFT_RAYCAST.enabled = true
 	RIGHT_RAYCAST.enabled = true
 	if (RIGHT_RAYCAST.is_colliding()):
-		head.rotation.z = lerp(head.rotation.z, WALL_TILT, 0.1)
+		head.rotation.z = lerp(head.rotation.z, WALL_TILT, 0.09)
 	else:
-		head.rotation.z = lerp(head.rotation.z, -WALL_TILT, 0.1)	
+		head.rotation.z = lerp(head.rotation.z, -WALL_TILT, 0.09)	
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;  
@@ -63,13 +67,9 @@ func _physics_process(delta: float) -> void:
 			JUMP_COUNT += JUMP_COUNT
 			velocity.y = JUMP_VELOCITY * 2
 			
-			
-			
 	if not is_on_floor() :
 		velocity += get_gravity() * delta
 		
-
-	# Handle jump.
 	if Input.is_action_just_pressed("Jump") and JUMP_COUNT > 1 :
 		
 		velocity.y = JUMP_VELOCITY
@@ -81,17 +81,12 @@ func _physics_process(delta: float) -> void:
 		
 	# Dash mechanic
 	#if Input.is_action_just_pressed("Dash"):
-	
-	
 	head.rotation_degrees.z = lerp(head.rotation_degrees.z, SIDEWAYS_TILT, 0.1)	
 	head.rotation_degrees.x = lerp(head.rotation_degrees.x, NORMAL_TILT, 0.1)	
 	
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("left", "right", "up", "down")
 	var direction = (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	if direction:
-		
+	if direction:	
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
 		NORMAL_TILT = head.transform.basis.z.dot(direction) * 3.5
