@@ -3,14 +3,14 @@ extends CharacterBody3D
 const SPEED = 8.0
 const JUMP_VELOCITY = 4.5
 const SENSITIVITY = 0.002
-const DASH_VELOCITY = 150.0
-const WALL_TILT = 0.5
+const DASH_VELOCITY = 400.0
+const WALL_TILT = 0.7
 
 var JUMP_COUNT = 2
 var WALL_INTERACTION = 1
 var WALL_DETECTION = 1
 var is_dashing = false
-var DASH_TIME = 0.2
+var DASH_TIME = 0.1
 var DASH_TIMER = 0.0
 var dash_direction = Vector3.ZERO
 
@@ -28,9 +28,6 @@ var CURRENT_STATE = PlayerState.WalkingState
 
 enum PlayerState { WalkingState, RunningState, MidAirState, DashState, OnWallState}
 
-
-	
-		
 
 func wall_detecion():
 	
@@ -69,11 +66,15 @@ func _physics_process(delta: float) -> void:
 	var direction = (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	if is_on_wall() and not is_on_floor() and WALL_INTERACTION > 0:
+		
 		wall_detecion()
 		if Input.is_action_just_pressed("Jump"):
+			velocity.y = JUMP_VELOCITY * 2
 			WALL_INTERACTION = 0;
 			JUMP_COUNT += JUMP_COUNT
-			velocity.y = JUMP_VELOCITY * 2
+			#Çift zıplamada zıplamayı ikiye katlıyor
+			#Tek zıplamada normal hızda zıplıyor
+			#Çözülmesi gerek
 			
 	if not is_on_floor() :
 		velocity += get_gravity() * delta
