@@ -3,7 +3,7 @@ extends CharacterBody3D
 const SPEED = 8.0
 const JUMP_VELOCITY = 4.5
 const SENSITIVITY = 0.002
-const DASH_VELOCITY = 400.0
+const DASH_VELOCITY = 250.0
 const WALL_TILT = 0.7
 
 var JUMP_COUNT = 2
