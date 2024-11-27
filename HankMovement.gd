@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
-const SPEED = 8.0
-const JUMP_VELOCITY = 4.5
+const SPEED = 10.0
+const JUMP_VELOCITY = 5.5
 const SENSITIVITY = 0.002
 const DASH_VELOCITY = 250.0
 const WALL_TILT = 0.7
@@ -10,8 +10,11 @@ var JUMP_COUNT = 2
 var WALL_INTERACTION = 1
 var WALL_DETECTION = 1
 var is_dashing = false
+var is_slowdown = false
 var DASH_TIME = 0.1
 var DASH_TIMER = 0.0
+var SLOW_TIME = 0.1
+var SlOW_TIMER = 0.0
 var dash_direction = Vector3.ZERO
 
 
@@ -78,6 +81,21 @@ func _physics_process(delta: float) -> void:
 			
 	if not is_on_floor() :
 		velocity += get_gravity() * delta
+		if Input.is_action_just_pressed("Slowdown"):
+			
+			is_slowdown = !is_slowdown
+			SlOW_TIMER = SLOW_TIME
+			if is_slowdown:
+				
+				SlOW_TIMER -= delta
+				if SlOW_TIMER > 0:
+					Engine.time_scale = 0.5
+				else:
+					is_slowdown = false	
+			else:
+				Engine.time_scale = 1.0
+			
+		
 		
 	if Input.is_action_just_pressed("Jump") and JUMP_COUNT > 1 :
 		
@@ -86,7 +104,9 @@ func _physics_process(delta: float) -> void:
 		
 	if is_on_floor():
 		JUMP_COUNT = 2
-		WALL_INTERACTION = 1;
+		WALL_INTERACTION = 1
+		SlOW_TIMER = 0.0
+		Engine.time_scale = 1
 		
 	head.rotation_degrees.z = lerp(head.rotation_degrees.z, SIDEWAYS_TILT, 0.1)	
 	head.rotation_degrees.x = lerp(head.rotation_degrees.x, NORMAL_TILT, 0.1)	
