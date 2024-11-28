@@ -13,7 +13,7 @@ var is_dashing = false
 var is_slowdown = false
 var DASH_TIME = 0.1
 var DASH_TIMER = 0.0
-var SLOW_TIME = 0.1
+var SLOW_TIME = 1.0
 var SlOW_TIMER = 0.0
 var dash_direction = Vector3.ZERO
 
@@ -61,8 +61,12 @@ func _unhandled_input(event):
 			camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-90), deg_to_rad(100))
 			
 			
-			
-			
+func is_wall_jump() -> bool:
+	return Input.is_action_just_pressed("Jump") and JUMP_COUNT > 1 and is_on_wall() and not is_on_floor()
+
+func is_normal_jump() -> bool:
+	return Input.is_action_just_pressed("Jump") and JUMP_COUNT > 1  
+
 func _physics_process(delta: float) -> void:
 	
 	var input_dir := Input.get_vector("left", "right", "up", "down")
@@ -71,10 +75,12 @@ func _physics_process(delta: float) -> void:
 	if is_on_wall() and not is_on_floor() and WALL_INTERACTION > 0:
 		
 		wall_detecion()
+		
 		if Input.is_action_just_pressed("Jump"):
-			velocity.y = JUMP_VELOCITY * 2
+			velocity.y = JUMP_VELOCITY * 1.5
 			WALL_INTERACTION = 0;
 			JUMP_COUNT += JUMP_COUNT
+			
 			#Çift zıplamada zıplamayı ikiye katlıyor
 			#Tek zıplamada normal hızda zıplıyor
 			#Çözülmesi gerek
@@ -85,19 +91,24 @@ func _physics_process(delta: float) -> void:
 			
 			is_slowdown = !is_slowdown
 			SlOW_TIMER = SLOW_TIME
-			if is_slowdown:
-				
-				SlOW_TIMER -= delta
-				if SlOW_TIMER > 0:
-					Engine.time_scale = 0.5
-				else:
-					is_slowdown = false	
-			else:
-				Engine.time_scale = 1.0
 			
+	
+		if is_slowdown:
+				
+			SlOW_TIMER -= delta
+			if SlOW_TIMER > 0:
+				Engine.time_scale = 0.5
+			else:
+				is_slowdown = false	
+		if !is_slowdown:
+			Engine.time_scale = 1.0
+			
+	if is_wall_jump():
 		
-		
-	if Input.is_action_just_pressed("Jump") and JUMP_COUNT > 1 :
+		velocity.y = JUMP_VELOCITY * 1.5
+		JUMP_COUNT -= JUMP_COUNT
+	
+	if is_normal_jump():
 		
 		velocity.y = JUMP_VELOCITY
 		JUMP_COUNT -= JUMP_COUNT
@@ -106,6 +117,7 @@ func _physics_process(delta: float) -> void:
 		JUMP_COUNT = 2
 		WALL_INTERACTION = 1
 		SlOW_TIMER = 0.0
+		is_slowdown = false
 		Engine.time_scale = 1
 		
 	head.rotation_degrees.z = lerp(head.rotation_degrees.z, SIDEWAYS_TILT, 0.1)	
