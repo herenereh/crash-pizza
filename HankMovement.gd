@@ -32,7 +32,7 @@ var CURRENT_STATE = PlayerState.WalkingState
 enum PlayerState { WalkingState, RunningState, MidAirState, DashState, OnWallState}
 
 
-func wall_detecion():
+func wall_detection():
 	
 	RIGHT_RAYCAST.target_position = head.transform.basis.x.normalized() * WALL_DETECTION
 	LEFT_RAYCAST.target_position = (-head.transform.basis.x).normalized() * WALL_DETECTION
@@ -74,7 +74,7 @@ func _physics_process(delta: float) -> void:
 	
 	if is_on_wall() and not is_on_floor() and WALL_INTERACTION > 0:
 		
-		wall_detecion()
+		wall_detection()
 		
 		if Input.is_action_just_pressed("Jump"):
 			velocity.y = JUMP_VELOCITY * 1.5
