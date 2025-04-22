@@ -1,28 +1,42 @@
 extends CharacterBody3D
 
+class_name Player
+
+#Gereral Movement
 const SPEED = 10.0
 const JUMP_VELOCITY = 5.5
 const SENSITIVITY = 0.002
 const DASH_VELOCITY = 250.0
 const WALL_TILT = 0.7
 
+#Jump
 var JUMP_COUNT = 2
+
+#Wall Movement
 var WALL_INTERACTION = 1
 var WALL_DETECTION = 1
+
+#Dash
+signal dashed
+var MIN_DASH = 0;
+var MAX_DASH = 100;
 var is_dashing = false
-var is_slowdown = false
+var dash_direction = Vector3.ZERO
 var DASH_TIME = 0.1
 var DASH_TIMER = 0.0
+
+#Slowdown
+var is_slowdown = false
 var SLOW_TIME = 1.0
 var SlOW_TIMER = 0.0
-var dash_direction = Vector3.ZERO
 
-
+#Tilt
 var SIDEWAYS_TILT = 0.0
 var NORMAL_TILT = 0.0
 
 var CURRENT_STATE = PlayerState.WalkingState
 
+@onready var CURRENT_DASH: int = MIN_DASH
 @onready var LEFT_RAYCAST = $LeftRaycast;
 @onready var RIGHT_RAYCAST = $RightRaycast;
 @onready var head = $Head;
@@ -31,7 +45,7 @@ var CURRENT_STATE = PlayerState.WalkingState
 
 enum PlayerState { WalkingState, RunningState, MidAirState, DashState, OnWallState}
 
-
+	
 func wall_detection():
 	
 	RIGHT_RAYCAST.target_position = head.transform.basis.x.normalized() * WALL_DETECTION
@@ -46,6 +60,7 @@ func wall_detection():
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;  
 	# Video'da farklı bir kod kullanıyor fakat ileriki versiyonlarında artık bu kod kullanılıyor.
+	
 	
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
@@ -94,13 +109,15 @@ func _physics_process(delta: float) -> void:
 			
 	
 		if is_slowdown:
-				
+			
 			SlOW_TIMER -= delta
 			if SlOW_TIMER > 0:
 				Engine.time_scale = 0.5
 			else:
 				is_slowdown = false	
 		if !is_slowdown:
+			
+			
 			Engine.time_scale = 1.0
 			
 	if is_wall_jump():
@@ -138,9 +155,12 @@ func _physics_process(delta: float) -> void:
 				velocity.z = lerp(velocity.z, dash_direction.z * DASH_VELOCITY, 0.2)
 			if DASH_TIMER <=0:
 				is_dashing = false
-		
 		if Input.is_action_just_pressed("Dash"):
+			
+			CURRENT_DASH += 1
+			dashed.emit();
 			is_dashing = true
+			
 			DASH_TIMER = DASH_TIME
 			dash_direction = direction.normalized()
 			

@@ -1,6 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://bsrnjoc0qrkuv"]
+[gd_scene load_steps=13 format=3 uid="uid://bsrnjoc0qrkuv"]
 
-[ext_resource type="Script" path="res://HankMovement.gd" id="1_wjv42"]
+[ext_resource type="Script" path="res://player/HankMovement.gd" id="1_wjv42"]
+[ext_resource type="Script" path="res://gui/DashBar.gd" id="2_wexk0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o54hu"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -68,28 +69,38 @@ mesh = SubResource("BoxMesh_vj5sf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0864613, -0.00195226, -0.186334)
 shape = SubResource("ConvexPolygonShape3D_o3x3a")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+[node name="Player" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.89963e-05, 0.00691223, 0.00248766)
 script = ExtResource("1_wjv42")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CapsuleMesh_oa6ub")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("ConvexPolygonShape3D_psvmc")
 
-[node name="Head" type="Node3D" parent="CharacterBody3D"]
+[node name="Head" type="Node3D" parent="Player"]
 
-[node name="FPSCam" type="Camera3D" parent="CharacterBody3D/Head"]
+[node name="FPSCam" type="Camera3D" parent="Player/Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0108631, 1.56241, -0.0633383)
 fov = 87.4623
 
-[node name="LeftRaycast" type="RayCast3D" parent="CharacterBody3D"]
+[node name="LeftRaycast" type="RayCast3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.89963e-05, -0.00691223, -0.00248766)
 
-[node name="RightRaycast" type="RayCast3D" parent="CharacterBody3D"]
+[node name="RightRaycast" type="RayCast3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.89963e-05, -0.00691223, -0.00248766)
 
-[node name="ForwardRaycast" type="RayCast3D" parent="CharacterBody3D"]
+[node name="ForwardRaycast" type="RayCast3D" parent="Player"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer" node_paths=PackedStringArray("player")]
+offset_left = 66.0
+offset_top = 906.0
+offset_right = 159.0
+offset_bottom = 1010.0
+script = ExtResource("2_wexk0")
+player = NodePath("../../Player")
