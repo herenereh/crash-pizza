@@ -9,6 +9,7 @@ const SENSITIVITY = 0.002
 const DASH_VELOCITY = 250.0
 const WALL_TILT = 0.7
 
+
 #Jump
 var JUMP_COUNT = 2
 
@@ -33,6 +34,9 @@ var SlOW_TIMER = 0.0
 #Tilt
 var SIDEWAYS_TILT = 0.0
 var NORMAL_TILT = 0.0
+
+var sliding_head_position := Vector3(0, -0.1, 0)
+var normal_head_position := Vector3(0, 1, 0)
 
 var CURRENT_STATE = PlayerState.WalkingState
 
@@ -63,7 +67,10 @@ func _ready():
 	
 	
 func _unhandled_input(event):
+	
 	if event is InputEventMouseMotion:
+		
+		
 		if not is_on_floor():
 			
 			head.rotate_y(-event.relative.x * SENSITIVITY)	
@@ -155,6 +162,8 @@ func _physics_process(delta: float) -> void:
 				velocity.z = lerp(velocity.z, dash_direction.z * DASH_VELOCITY, 0.2)
 			if DASH_TIMER <=0:
 				is_dashing = false
+			
+			
 		if Input.is_action_just_pressed("Dash"):
 			
 			CURRENT_DASH += 1
@@ -163,7 +172,6 @@ func _physics_process(delta: float) -> void:
 			
 			DASH_TIMER = DASH_TIME
 			dash_direction = direction.normalized()
-			
 		
 	else:
 		velocity.x = 0.0
