@@ -17,7 +17,7 @@ func _on_player_dashed():
 	player.CURRENT_DASH = clamp(player.CURRENT_DASH, 0, player.MAX_DASH)
 	time_since_last_dash = 0.0
 	update()
-
+	
 func _process(delta):
 	time_since_last_dash += delta
 

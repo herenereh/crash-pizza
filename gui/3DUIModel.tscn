@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://cgirf88ifvn54"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ae8g5"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4cuiy"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_oiw5d"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_olu21"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_jmq2d"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_oomfg"]
+
+[node name="3DUI" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00346401, 0.946411, 0.0374315)
+
+[node name="Head" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0549134, 1.9557, 0)
+mesh = SubResource("SphereMesh_ae8g5")
+
+[node name="Torso" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.1275, 0, 0, 0, 0.995, 0, 0, 0, 0.51, 0.0676086, 1.00077, -0.175163)
+mesh = SubResource("BoxMesh_4cuiy")
+
+[node name="Left Leg" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.31466, -0.220901, 0, 1.28265, 0.226414, 0, 0, 0, 0.520891, -1.23738, 1.0023, -0.232919)
+mesh = SubResource("BoxMesh_oiw5d")
+
+[node name="Right Leg" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.01326, 0.263832, -0.00125655, -1.53193, 0.174508, 0.000576311, 0.00413923, 0.000443374, 0.52089, 0.838723, -0.19938, -0.200531)
+mesh = SubResource("BoxMesh_olu21")
+
+[node name="Left Arm" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.785339, -0.285949, 0, 1.66035, 0.135253, 0, 0, 0, 0.520891, -0.461207, -0.286995, -0.152001)
+mesh = SubResource("BoxMesh_jmq2d")
+
+[node name="Right Arm" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.17666, 0.242887, 0.000345757, -1.41031, 0.202648, -0.00106542, -0.00366569, 0.000253262, 0.52089, 1.3892, 1.03613, -0.403844)
+mesh = SubResource("BoxMesh_oomfg")
