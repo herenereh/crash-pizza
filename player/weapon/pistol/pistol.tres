@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=3 format=3 uid="uid://bomype6w5u0yk"]
+
+[ext_resource type="Script" path="res://player/weapon/weapon_data.gd" id="1_yp47g"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_u0xpa"]
+
+[resource]
+script = ExtResource("1_yp47g")
+weapon_name = "Pistol"
+damage = 10.0
+fire_rate = 5.0
+max_range = 100.0
+spread_degrees = 0.0
+pellet_count = 1
+automatic = false
+is_melee_weapon = false
+position = Vector3(0, 0, 0)
+rotation = Vector3(0, 0, 0)
+weapon_mesh = SubResource("CapsuleMesh_u0xpa")
+tracer_color = Color(1, 1, 0, 1)
+can_pierce = false

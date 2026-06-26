@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://c4v6rwk73kamk"]
 
-[ext_resource type="Script" path="res://facility/FacilityGeneration.gd" id="1_jbs0w"]
-[ext_resource type="MeshLibrary" uid="uid://dqfgv5wn2ce1g" path="res://facility/FacilityTiles.tres" id="2_bgpd6"]
+[ext_resource type="Script" path="res://facility/FacilityGeneration.gd" id="1_y1lu7"]
+[ext_resource type="MeshLibrary" uid="uid://dqfgv5wn2ce1g" path="res://facility/tiles.tres" id="2_5lm01"]
 
 [node name="Facility" type="Node3D"]
-script = ExtResource("1_jbs0w")
+script = ExtResource("1_y1lu7")
 room_number = 29
 max_room_size = 30
 max_room_height = 10
@@ -12,7 +12,7 @@ border_size_x = 95
 border_size_z = 106
 
 [node name="GridMap" type="GridMap" parent="."]
-mesh_library = ExtResource("2_bgpd6")
+mesh_library = ExtResource("2_5lm01")
 cell_size = Vector3(1, 1, 1)
 cell_center_y = false
 data = {

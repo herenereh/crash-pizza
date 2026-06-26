@@ -1,15 +1,15 @@
 [gd_scene load_steps=22 format=3 uid="uid://bsrnjoc0qrkuv"]
 
-[ext_resource type="Script" path="res://player/movement/HankMovement.gd" id="1_wjv42"]
+[ext_resource type="Script" path="res://player/movement/hank_movement.gd" id="1_wjv42"]
 [ext_resource type="Script" path="res://player/state_machine/state_machine.gd" id="2_4f6rd"]
-[ext_resource type="Script" path="res://gui/DashBar.gd" id="2_wexk0"]
-[ext_resource type="PackedScene" uid="uid://cgirf88ifvn54" path="res://gui/3DUIModel.tscn" id="3_h86la"]
+[ext_resource type="PackedScene" uid="uid://dwx4cfv345xgi" path="res://player/weapon/weapon.tscn" id="2_ukame"]
+[ext_resource type="Script" path="res://gui/dash_bar.gd" id="2_wexk0"]
+[ext_resource type="PackedScene" uid="uid://cgirf88ifvn54" path="res://gui/3D_ui_model.tscn" id="3_h86la"]
 [ext_resource type="Script" path="res://player/state_machine/walking_state.gd" id="3_tqwae"]
 [ext_resource type="Script" path="res://player/state_machine/mid_air_state.gd" id="4_ipfu3"]
 [ext_resource type="Script" path="res://player/state_machine/dash_state.gd" id="5_12lnk"]
 [ext_resource type="Script" path="res://player/state_machine/on_wall_state.gd" id="6_08ghx"]
-[ext_resource type="Script" path="res://player/weapon/weapon_controller.gd" id="7_qk2ct"]
-[ext_resource type="Script" path="res://gui/DebugBar.gd" id="9_4c2so"]
+[ext_resource type="Script" path="res://gui/debug_interface.gd" id="9_4c2so"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o54hu"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -47,36 +47,36 @@ points = PackedVector3Array(-0.125207, -0.532801, -0.480507, 0.0227831, 0.47607,
 [sub_resource type="LabelSettings" id="LabelSettings_tms1c"]
 font_size = 106
 
-[node name="The World" type="Node3D"]
+[node name="Main" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_6cted")
 
-[node name="Main" type="Node" parent="."]
+[node name="Environment" type="Node" parent="."]
 
-[node name="Ground" type="StaticBody3D" parent="Main"]
+[node name="Ground" type="StaticBody3D" parent="Environment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Main/Ground"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ground"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0882998, -0.0119911, -0.415224)
 shape = SubResource("BoxShape3D_30qic")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Main/Ground"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Ground"]
 mesh = SubResource("BoxMesh_81bhi")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Main"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
 transform = Transform3D(0.880181, 0.470091, -0.0655364, -0.160474, 0.424683, 0.891007, 0.446687, -0.77373, 0.449235, -5.96895, 24.6212, -21.1514)
 shadow_enabled = true
 shadow_bias = 0.15
 
-[node name="Wall" type="StaticBody3D" parent="Main"]
+[node name="Wall" type="StaticBody3D" parent="Environment"]
 transform = Transform3D(2.42, 0, 0, 0, 5.78, 0, 0, 0, 5.28, -6.469, 2.814, 1.26)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Main/Wall"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Wall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0218818, -0.138554, -0.198449)
 mesh = SubResource("BoxMesh_vj5sf")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Main/Wall"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Wall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0864613, -0.00195226, -0.186334)
 shape = SubResource("ConvexPolygonShape3D_o3x3a")
 
@@ -102,6 +102,12 @@ skeleton = NodePath("../../..")
 [node name="FPSCam" type="Camera3D" parent="Player/Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0108631, 1.56241, -0.0633383)
 fov = 87.4623
+
+[node name="WeaponRig" type="Node3D" parent="Player/Head/FPSCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.955451, -0.00309563, -1.8076)
+
+[node name="Weapon" parent="Player/Head/FPSCam/WeaponRig" instance=ExtResource("2_ukame")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Node3D" type="Node3D" parent="Player/Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.89963e-05, -0.00691223, -0.00248766)
@@ -131,11 +137,6 @@ script = ExtResource("5_12lnk")
 
 [node name="Wall" type="Node" parent="Player/StateMachine"]
 script = ExtResource("6_08ghx")
-
-[node name="WeaponController" type="Node" parent="Player"]
-script = ExtResource("7_qk2ct")
-
-[node name="Muzzle" type="Marker3D" parent="Player/WeaponController"]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

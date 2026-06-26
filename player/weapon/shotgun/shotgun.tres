@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=3 format=3 uid="uid://b6hrswy1bhk7v"]
+
+[ext_resource type="Script" path="res://player/weapon/weapon_data.gd" id="1_g4pmq"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_wmqus"]
+
+[resource]
+script = ExtResource("1_g4pmq")
+weapon_name = "shotgun"
+damage = 10.0
+fire_rate = 5.0
+max_range = 100.0
+spread_degrees = 0.0
+pellet_count = 1
+automatic = false
+is_melee_weapon = false
+position = Vector3(0, 0, 0)
+rotation = Vector3(0, 0, 0)
+weapon_mesh = SubResource("BoxMesh_wmqus")
+tracer_color = Color(1, 1, 0, 1)
+can_pierce = false

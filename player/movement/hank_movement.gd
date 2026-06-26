@@ -57,7 +57,6 @@ var is_crouching = false
 @onready var head = $Head;
 @onready var camera = $Head/FPSCam;
 @onready var head_mesh = $Head/HeadMesh
-@onready var weapon_controller = $WeaponController
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
