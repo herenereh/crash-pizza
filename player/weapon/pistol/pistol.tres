@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" path="res://player/weapon/weapon_data.gd" id="1_yp47g"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_u0xpa"]
+[sub_resource type="BoxMesh" id="BoxMesh_32i1e"]
+size = Vector3(0.22, 0.225, 1)
 
 [resource]
 script = ExtResource("1_yp47g")
@@ -16,6 +17,6 @@ automatic = false
 is_melee_weapon = false
 position = Vector3(0, 0, 0)
 rotation = Vector3(0, 0, 0)
-weapon_mesh = SubResource("CapsuleMesh_u0xpa")
+weapon_mesh = SubResource("BoxMesh_32i1e")
 tracer_color = Color(1, 1, 0, 1)
 can_pierce = false

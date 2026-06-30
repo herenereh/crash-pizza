@@ -3,12 +3,18 @@ extends CharacterBody3D
 class_name Player
 
 #General Movement
-const SPEED = 10.0
+const SPEED = 20.0
+const AIR_SPEED = 25.0
 const JUMP_VELOCITY = 10.0
 const SENSITIVITY = 0.002
-const DASH_VELOCITY = 250.0
+const DASH_VELOCITY = 150.0
 const WALL_TILT = 0.7
 var direction: Vector3 = Vector3.ZERO
+const GROUND_ACCELERATION = 80.0
+const AIR_ACCELERATION = 50.0
+const GROUND_FRICTION = 35.0
+const AIR_FRICTION = 30.0
+
 
 #To Avoid Magic Numbers
 const HALF_TIME = 0.5
@@ -22,8 +28,9 @@ const CROUCH_WEIGHT = 0.3
 var JUMP_COUNT = 2
 
 #Wall Movement
-var WALL_INTERACTION = 1
 var WALL_DETECTION = 1
+var last_wall_normal := Vector3.ZERO
+
 
 #Dash
 
@@ -32,8 +39,9 @@ var MIN_DASH = 0;
 var MAX_DASH = 100;
 var is_dashing = false
 var dash_direction = Vector3.ZERO
-var DASH_TIME = 0.1
+var DASH_TIME = 0.2
 var DASH_TIMER = 0.0
+var saved_movement_speed = 0.0
 
 #Slowdown
 var is_slowdown = false
@@ -93,28 +101,70 @@ func apply_head_tilt() -> void:
 	head.rotation_degrees.z = lerp(head.rotation_degrees.z, SIDEWAYS_TILT, TILT_WEIGHT)
 	head.rotation_degrees.x = lerp(head.rotation_degrees.x, NORMAL_TILT, TILT_WEIGHT)
 
-func apply_ground_movement() -> void:
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
-	else:
-		velocity.x = 0.0
-		velocity.z = 0.0
-		
 
-func apply_air_movement() -> void:
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+
+func apply_ground_movement(delta: float) -> void:
+	if is_dashing:
+		return
+	var horizontal := Vector3(velocity.x, 0.0, velocity.z)
+	if direction == Vector3.ZERO:
+		horizontal = horizontal.move_toward(Vector3.ZERO, GROUND_FRICTION * delta)
+	else:
+		var target := Vector3(direction.x, 0.0, direction.z).normalized() * SPEED
+		horizontal = horizontal.move_toward(target, GROUND_ACCELERATION * delta)
+	velocity.x = horizontal.x
+	velocity.z = horizontal.z
+
+func apply_air_movement(delta: float) -> void:
+	if is_dashing:
+		return
 		
+	var horizontal := Vector3(velocity.x, 0.0, velocity.z)
+	if direction == Vector3.ZERO:
+		horizontal = horizontal.move_toward(Vector3.ZERO, AIR_FRICTION * delta)
+	else:
+		var target := Vector3(direction.x, 0.0, direction.z).normalized() * AIR_SPEED
+		horizontal = horizontal.move_toward(target, AIR_ACCELERATION * delta)
+	velocity.x = horizontal.x
+	velocity.z = horizontal.z
+
+func _accelerate_direction(delta: float, 
+max_speed: float, 
+acceleration: float, 
+friction: float, 
+stop_when_idle: bool = false
+) -> void:
+
+	var horizontal_velocity := Vector3(velocity.x, 0.0, velocity.z)
+
+	if direction == Vector3.ZERO:
+		if stop_when_idle:
+			horizontal_velocity = horizontal_velocity.move_toward(Vector3.ZERO, friction * delta)
+		else:
+			horizontal_velocity = horizontal_velocity.move_toward(Vector3.ZERO, AIR_FRICTION * delta)
+		velocity.x = horizontal_velocity.x
+		velocity.z = horizontal_velocity.z
+		return
+
+	var desired_velocity := Vector3(direction.x, 0.0, direction.z).normalized()
+	var current_speed := horizontal_velocity.dot(desired_velocity)
+	var add_speed := max_speed - current_speed
+	if add_speed <= 0.0:
+		return 
+
+	var acceleration_velocity := minf(acceleration * delta, add_speed)
+	velocity.x += desired_velocity.x * acceleration_velocity
+	velocity.z += desired_velocity.z * acceleration_velocity
+
 
 func apply_gravity(delta: float) -> void:
+	if is_dashing:
+		return
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
 func reset_ground_vars() -> void:
 	JUMP_COUNT = 2
-	WALL_INTERACTION = 1
 	SlOW_TIMER = 0.0
 	is_slowdown = false
 	Engine.time_scale = NORMAL_TIME
@@ -132,12 +182,18 @@ func try_jump() -> bool:
 	return false
 
 func try_wall_jump() -> bool:
-	if Input.is_action_just_pressed("Jump") and JUMP_COUNT > 0 and is_on_wall() and not is_on_floor():
-		velocity.y = JUMP_VELOCITY * 1.5
-		JUMP_COUNT -= 1
-		WALL_INTERACTION = 0
-		return true
-	return false
+	if not Input.is_action_just_pressed("Jump"):
+		return false
+	if JUMP_COUNT <= 0 or not is_on_wall() or is_on_floor():
+		return false
+	var wall_normal := get_wall_normal()
+	if last_wall_normal != Vector3.ZERO:
+		if wall_normal.dot(last_wall_normal) > 0.9:
+			return false
+	velocity.y = JUMP_VELOCITY * 1.5
+	JUMP_COUNT += 1
+	last_wall_normal = wall_normal
+	return true
 
 func crouching() -> void:
 	if Input.is_action_pressed("Crouch"):
@@ -160,6 +216,9 @@ func wall_detection() -> void:
 		head.rotation.z = lerp(head.rotation.z, -WALL_TILT, WALL_TILT_WEIGHT)
 	elif FORWARD_RAYCAST.is_colliding() or BACKWARD_RAYCAST.is_colliding():
 		pass
+	if not is_on_wall():
+		last_wall_normal = Vector3.ZERO
+
 
 func handle_slowdown(delta: float) -> void:
 	if Input.is_action_just_pressed("Slowdown"):
@@ -172,3 +231,4 @@ func handle_slowdown(delta: float) -> void:
 			is_slowdown = false
 	elif not is_on_floor():
 		Engine.time_scale = NORMAL_TIME
+		

@@ -6,9 +6,9 @@ extends State
 
 func _physics_update(delta: float) -> void:
 	player.apply_gravity(delta)
-	player.apply_air_movement()
 	player.try_wall_jump()
 	player.try_jump()
+	player.apply_air_movement(delta)
 
 	if player.is_on_wall() and not player.is_on_floor():
 		switch_state.emit(on_wall)

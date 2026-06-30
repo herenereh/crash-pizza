@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://dwx4cfv345xgi"]
+[gd_scene load_steps=4 format=3 uid="uid://dwx4cfv345xgi"]
 
 [ext_resource type="Script" path="res://player/weapon/init_weapon.gd" id="1_peggw"]
 [ext_resource type="Resource" uid="uid://bomype6w5u0yk" path="res://player/weapon/pistol/pistol.tres" id="2_vc2jy"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_32i1e"]
+size = Vector3(0.22, 0.225, 1)
 
 [node name="Weapon" type="Node3D"]
 transform = Transform3D(1.00682, 0, 0, 0, 1.00682, 0, 0, 0, 1.00682, 0, 0, 0)
@@ -10,3 +13,4 @@ WEAPON_TYPE = ExtResource("2_vc2jy")
 
 [node name="WeaponMesh" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
+mesh = SubResource("BoxMesh_32i1e")
