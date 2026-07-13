@@ -7,7 +7,7 @@ extends State
 func _physics_update(delta: float) -> void:
 	player.reset_ground_vars()
 	player.crouching()
-	player.apply_ground_movement(delta)
+	player.apply_movement(delta, player.GROUND_ACCELERATION, player.GROUND_FRICTION, player.SPEED)
 	
 
 	if Input.is_action_just_pressed("Dash") and player.direction != Vector3.ZERO:

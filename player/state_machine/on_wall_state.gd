@@ -6,10 +6,12 @@ extends State
 
 func enter_state() -> void:
 	player.wall_detection()
+	player.JUMP_COUNT =1
 
 func _physics_update(delta: float) -> void:
 	player.apply_gravity(delta)
 	player.wall_detection()
+	player.apply_wall(delta, player.WALL_ACCELERATION, player.WALL_FRICTION, player.SPEED)
 
 	if player.try_wall_jump():
 		switch_state.emit(mid_air)

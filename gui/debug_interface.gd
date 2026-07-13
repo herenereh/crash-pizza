@@ -24,3 +24,4 @@ func refresh_debug_text() -> void:
 	text += "Is Dashing: %s\n" % player.is_dashing
 	text += "Current Dash: %s\n" % player.CURRENT_DASH
 	text += "Jump Count: %s\n" % player.JUMP_COUNT
+	text += "FPS: %s" % Engine.get_frames_per_second() 

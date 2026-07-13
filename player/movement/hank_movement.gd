@@ -14,12 +14,14 @@ const GROUND_ACCELERATION = 80.0
 const AIR_ACCELERATION = 50.0
 const GROUND_FRICTION = 35.0
 const AIR_FRICTION = 30.0
+const WALL_ACCELERATION = 80.0
+const WALL_FRICTION = 30.0
 
 
 #To Avoid Magic Numbers
 const HALF_TIME = 0.5
 const NORMAL_TIME = 1.0
-const WALL_TILT_WEIGHT = 0.09
+const WALL_TILT_WEIGHT = 0.05
 const TILT_WEIGHT = 0.1
 const CROUCH_WEIGHT = 0.3
 
@@ -28,7 +30,7 @@ const CROUCH_WEIGHT = 0.3
 var JUMP_COUNT = 2
 
 #Wall Movement
-var WALL_DETECTION = 1
+var WALL_DETECTION = 2
 var last_wall_normal := Vector3.ZERO
 
 
@@ -127,6 +129,33 @@ func apply_air_movement(delta: float) -> void:
 		horizontal = horizontal.move_toward(target, AIR_ACCELERATION * delta)
 	velocity.x = horizontal.x
 	velocity.z = horizontal.z
+	
+func apply_wall(delta: float, accel: float, fric: float, speed: float) -> void:
+	if not is_on_wall():
+		return
+	var wall_normal := get_wall_normal()
+	var wall_dir := direction - wall_normal * direction.dot(wall_normal)
+	var horizontal := Vector3(velocity.x, 0.0, velocity.z)
+	if wall_dir.length() < 0.1:
+		horizontal = horizontal.move_toward(Vector3.ZERO, fric * delta)
+	else:
+		var target := wall_dir.normalized() * speed
+		horizontal = horizontal.move_toward(target, accel * delta)
+	velocity.x = horizontal.x
+	velocity.z = horizontal.z
+
+func apply_movement(delta: float, accel: float, fric: float, speed: float) -> void:
+	if is_dashing:
+		return
+		
+	var horizontal := Vector3(velocity.x, 0.0, velocity.z)
+	if direction == Vector3.ZERO:
+		horizontal = horizontal.move_toward(Vector3.ZERO, fric * delta)
+	else:
+		var target := Vector3(direction.x, 0.0, direction.z).normalized() * speed
+		horizontal = horizontal.move_toward(target, accel * delta)
+	velocity.x = horizontal.x
+	velocity.z = horizontal.z
 
 func _accelerate_direction(delta: float, 
 max_speed: float, 
@@ -164,10 +193,11 @@ func apply_gravity(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 func reset_ground_vars() -> void:
-	JUMP_COUNT = 2
+	JUMP_COUNT = 1
 	SlOW_TIMER = 0.0
 	is_slowdown = false
 	Engine.time_scale = NORMAL_TIME
+	last_wall_normal = Vector3.ZERO
 
 func try_dash() -> bool:
 	if Input.is_action_just_pressed("Dash") and direction != Vector3.ZERO:
@@ -177,7 +207,6 @@ func try_dash() -> bool:
 func try_jump() -> bool:
 	if Input.is_action_just_pressed("Jump") and JUMP_COUNT > 0:
 		velocity.y = JUMP_VELOCITY
-		JUMP_COUNT -= 1
 		return true
 	return false
 
@@ -191,7 +220,7 @@ func try_wall_jump() -> bool:
 		if wall_normal.dot(last_wall_normal) > 0.9:
 			return false
 	velocity.y = JUMP_VELOCITY * 1.5
-	JUMP_COUNT += 1
+	JUMP_COUNT -=1
 	last_wall_normal = wall_normal
 	return true
 

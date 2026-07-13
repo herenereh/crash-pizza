@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://player/movement/hank_movement.gd" id="1_hg53x"]
 [ext_resource type="PackedScene" uid="uid://dwx4cfv345xgi" path="res://player/weapon/weapon.tscn" id="2_aqqd6"]
-[ext_resource type="Script" path="res://weapon_controller.gd" id="3_cqhk2"]
-[ext_resource type="Script" path="res://player/weapon/weapon_data.gd" id="4_nwg43"]
-[ext_resource type="Resource" uid="uid://bomype6w5u0yk" path="res://player/weapon/pistol/pistol.tres" id="5_iyaxt"]
-[ext_resource type="Resource" uid="uid://b6hrswy1bhk7v" path="res://player/weapon/shotgun/shotgun.tres" id="6_400vh"]
+[ext_resource type="Texture2D" uid="uid://ts7dgdewo11b" path="res://player/sprites/righthandempty.PNG" id="3_5jgme"]
+[ext_resource type="Script" path="res://player/hand_bobbing.gd" id="3_25oh5"]
+[ext_resource type="Script" path="res://player/weapon/weapon_controller.gd" id="3_cqhk2"]
+[ext_resource type="Texture2D" uid="uid://cwdetj1vhveic" path="res://player/sprites/lefthandempty.PNG" id="4_l7o4h"]
 [ext_resource type="Script" path="res://player/state_machine/state_machine.gd" id="7_mb2l5"]
 [ext_resource type="Script" path="res://player/state_machine/walking_state.gd" id="8_2urig"]
 [ext_resource type="Script" path="res://player/state_machine/mid_air_state.gd" id="9_jka7v"]
@@ -36,28 +36,55 @@ skeleton = NodePath("../../..")
 
 [node name="FPSCam" type="Camera3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0108631, 1.56241, -0.251325)
-fov = 87.4623
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Head/FPSCam"]
+
+[node name="Left Hand Sprite" type="Sprite2D" parent="Head/FPSCam/CanvasLayer" node_paths=PackedStringArray("player")]
+position = Vector2(955.5, 537)
+scale = Vector2(0.386492, 0.307868)
+texture = ExtResource("4_l7o4h")
+script = ExtResource("3_25oh5")
+player = NodePath("../../../..")
+is_left_hand = true
+bob_frequency = 8.0
+bob_amount_x = 15.0
+bob_amount_y = 15.0
+bob_return_speed = 8.0
+recoil_amount = 12.0
+recoil_return_speed = 10.0
+
+[node name="Right Hand Sprite" type="Sprite2D" parent="Head/FPSCam/CanvasLayer" node_paths=PackedStringArray("player")]
+position = Vector2(956.5, 533)
+scale = Vector2(0.388105, 0.311289)
+texture = ExtResource("3_5jgme")
+script = ExtResource("3_25oh5")
+player = NodePath("../../../..")
+bob_frequency = 8.0
+bob_amount_x = 15.0
+bob_amount_y = 15.0
+bob_return_speed = 8.0
+recoil_amount = 12.0
+recoil_return_speed = 10.0
 
 [node name="WeaponRig" type="Node3D" parent="Head/FPSCam"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.786, -0.313, -0.983)
 
 [node name="Weapon" parent="Head/FPSCam/WeaponRig" instance=ExtResource("2_aqqd6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+visible = false
 
 [node name="Marker3D" type="Marker3D" parent="Head/FPSCam/WeaponRig"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19209e-07, 0.0204496, -0.566039)
 
 [node name="WeaponController" type="Node3D" parent="Head/FPSCam"]
 script = ExtResource("3_cqhk2")
-weapons = Array[ExtResource("4_nwg43")]([ExtResource("5_iyaxt"), ExtResource("6_400vh")])
-
-[node name="ArmRig" type="Node3D" parent="Head/FPSCam"]
 
 [node name="WeaponRig2" type="Node3D" parent="Head/FPSCam"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.786, -0.313, -0.983)
 
 [node name="Weapon" parent="Head/FPSCam/WeaponRig2" instance=ExtResource("2_aqqd6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+visible = false
 
 [node name="Marker3D" type="Marker3D" parent="Head/FPSCam/WeaponRig2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19209e-07, 0.0204496, -0.566039)
