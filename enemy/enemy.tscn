@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://xk6g6xm61yq1"]
+
+[ext_resource type="Script" path="res://perk_system/perk_component.gd" id="1_ciyxa"]
+
+[node name="Enemy" type="Node3D"]
+
+[node name="PerkComponent" type="Node" parent="."]
+script = ExtResource("1_ciyxa")

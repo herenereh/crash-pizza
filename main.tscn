@@ -1,8 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://bsrnjoc0qrkuv"]
+[gd_scene load_steps=19 format=3 uid="uid://bsrnjoc0qrkuv"]
 
 [ext_resource type="PackedScene" uid="uid://cu77gt7svgho1" path="res://player/player.tscn" id="1_7pcxd"]
 [ext_resource type="Script" path="res://gui/dash_bar.gd" id="2_wexk0"]
 [ext_resource type="PackedScene" uid="uid://cgirf88ifvn54" path="res://gui/3D_ui_model.tscn" id="3_h86la"]
+[ext_resource type="Script" path="res://perk_system/event_bus.gd" id="5_ll8i3"]
+[ext_resource type="PackedScene" uid="uid://c8btxse0w341i" path="res://enemy.tscn" id="6_jy0b0"]
+[ext_resource type="Script" path="res://perk_system/perk_manager.gd" id="7_k3lev"]
 [ext_resource type="Script" path="res://gui/debug_interface.gd" id="9_4c2so"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o54hu"]
@@ -142,4 +145,13 @@ label_settings = SubResource("LabelSettings_tms1c")
 script = ExtResource("9_4c2so")
 player = NodePath("../../Player")
 
-[node name="Player" parent="." instance=ExtResource("1_7pcxd")]
+[node name="Player" parent="." groups=["Player"] instance=ExtResource("1_7pcxd")]
+
+[node name="Enemy" parent="." instance=ExtResource("6_jy0b0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.60077, -10.5462)
+
+[node name="EventBus" type="Node" parent="."]
+script = ExtResource("5_ll8i3")
+
+[node name="PerkManager" type="Node" parent="."]
+script = ExtResource("7_k3lev")

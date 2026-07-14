@@ -10,7 +10,7 @@ func enter_state() -> void:
 	player.saved_movement_speed = Vector3(player.velocity.x, 0 , player.velocity.z).length()
 	player.CURRENT_DASH += 1
 	player.dashed.emit()
-	
+	EventBus.player_dashed.emit()
 
 func _physics_update(delta: float) -> void:
 		
