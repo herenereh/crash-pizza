@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="PerkData" load_steps=2 format=3 uid="uid://bbbh4246dveot"]
 
-[ext_resource type="Script" path="res://perk_system/perk_data.gd" id="1_lqsnl"]
+[ext_resource type="Script" path="res://perk_system/data/perk_data.gd" id="2_s45q2"]
 
 [resource]
-script = ExtResource("1_lqsnl")
+script = ExtResource("2_s45q2")
 perk_name = ""
 perk_description = ""
 rarity = 0

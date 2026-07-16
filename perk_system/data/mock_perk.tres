@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PerkData" load_steps=3 format=3 uid="uid://e3cjkkxh4d6j"]
+
+[ext_resource type="PackedScene" uid="uid://bymtmfchoe8ow" path="res://perk_system/effects/dash_resets_jump.tscn" id="1_4msbm"]
+[ext_resource type="Script" path="res://perk_system/data/perk_data.gd" id="1_dmajo"]
+
+[resource]
+script = ExtResource("1_dmajo")
+perk_name = "Mock"
+perk_description = "Mock"
+rarity = 0
+effect_scene = ExtResource("1_4msbm")

@@ -1,12 +1,18 @@
-[gd_scene load_steps=19 format=3 uid="uid://bsrnjoc0qrkuv"]
+[gd_scene load_steps=26 format=3 uid="uid://bsrnjoc0qrkuv"]
 
 [ext_resource type="PackedScene" uid="uid://cu77gt7svgho1" path="res://player/player.tscn" id="1_7pcxd"]
+[ext_resource type="Shader" path="res://shaders/ps1.gdshader" id="1_33jk7"]
 [ext_resource type="Script" path="res://gui/dash_bar.gd" id="2_wexk0"]
 [ext_resource type="PackedScene" uid="uid://cgirf88ifvn54" path="res://gui/3D_ui_model.tscn" id="3_h86la"]
+[ext_resource type="PackedScene" uid="uid://dgcsspivyifm3" path="res://perk_system/ui/perk_ui.tscn" id="5_ito1d"]
 [ext_resource type="Script" path="res://perk_system/event_bus.gd" id="5_ll8i3"]
 [ext_resource type="PackedScene" uid="uid://c8btxse0w341i" path="res://enemy.tscn" id="6_jy0b0"]
 [ext_resource type="Script" path="res://perk_system/perk_manager.gd" id="7_k3lev"]
 [ext_resource type="Script" path="res://gui/debug_interface.gd" id="9_4c2so"]
+[ext_resource type="Script" path="res://perk_system/data/perk_data.gd" id="10_gjpvt"]
+[ext_resource type="Resource" uid="uid://ciumqs5yfdxnc" path="res://perk_system/data/infinite_jumps.tres" id="11_pf4ll"]
+[ext_resource type="Resource" uid="uid://f5wisyvdaii5" path="res://perk_system/data/dash_resets_jump.tres" id="12_gwq4w"]
+[ext_resource type="Resource" uid="uid://e3cjkkxh4d6j" path="res://perk_system/data/mock_perk.tres" id="13_ie2a4"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o54hu"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -31,7 +37,16 @@ albedo_color = Color(0.698346, 0.625147, 0.427732, 1)
 material = SubResource("StandardMaterial3D_ffcxt")
 size = Vector3(60, 2, 60)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v5xty"]
+render_priority = 0
+shader = ExtResource("1_33jk7")
+shader_parameter/affine_mapping = false
+shader_parameter/alpha_scissor = 0.5
+shader_parameter/jitter = 0.37
+shader_parameter/resolution = Vector2i(320, 240)
+
 [sub_resource type="BoxMesh" id="BoxMesh_vj5sf"]
+material = SubResource("ShaderMaterial_v5xty")
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_o3x3a"]
 points = PackedVector3Array(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5)
@@ -145,13 +160,17 @@ label_settings = SubResource("LabelSettings_tms1c")
 script = ExtResource("9_4c2so")
 player = NodePath("../../Player")
 
+[node name="Perk UI" parent="CanvasLayer" instance=ExtResource("5_ito1d")]
+
 [node name="Player" parent="." groups=["Player"] instance=ExtResource("1_7pcxd")]
 
-[node name="Enemy" parent="." instance=ExtResource("6_jy0b0")]
+[node name="Enemy" parent="." groups=["Enemies"] instance=ExtResource("6_jy0b0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.60077, -10.5462)
+collision_layer = 4
 
 [node name="EventBus" type="Node" parent="."]
 script = ExtResource("5_ll8i3")
 
 [node name="PerkManager" type="Node" parent="."]
 script = ExtResource("7_k3lev")
+perk_pool = Array[ExtResource("10_gjpvt")]([ExtResource("11_pf4ll"), ExtResource("12_gwq4w"), ExtResource("13_ie2a4"), ExtResource("11_pf4ll")])
