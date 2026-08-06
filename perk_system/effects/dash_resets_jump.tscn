@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://perk_system/effects/dash_resets_jump.gd" id="1_iwkxy"]
 
-[node name="DashResetsJump" type="Node"]
+[node name="dash_resets_jump" type="Node"]
 script = ExtResource("1_iwkxy")

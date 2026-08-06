@@ -54,3 +54,14 @@ text = "it does blah blah"
 [node name="Rarity" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "COMMON"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="DestroyButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Destroy"
+
+[node name="PickButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Pickup"

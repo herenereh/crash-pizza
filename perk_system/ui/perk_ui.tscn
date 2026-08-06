@@ -31,10 +31,3 @@ layout_mode = 2
 
 [node name="PerkCard3" parent="PerkPanel/CardContainer" instance=ExtResource("2_ao21b")]
 layout_mode = 2
-
-[node name="DestroyButon" type="Button" parent="PerkPanel"]
-layout_mode = 2
-offset_left = 1574.0
-offset_top = 918.0
-offset_right = 1842.0
-offset_bottom = 1030.0

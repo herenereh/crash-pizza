@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="PerkData" load_steps=3 format=3 uid="uid://ciumqs5yfdxnc"]
 
 [ext_resource type="Script" path="res://perk_system/data/perk_data.gd" id="1_jrcyc"]
-[ext_resource type="PackedScene" uid="uid://bymtmfchoe8ow" path="res://perk_system/effects/dash_resets_jump.tscn" id="1_sl4ut"]
+[ext_resource type="PackedScene" uid="uid://dn6hgcukdrsde" path="res://perk_system/effects/infinite_jumps.tscn" id="1_l1fu5"]
 
 [resource]
 script = ExtResource("1_jrcyc")
 perk_name = "Infinite Jump"
 perk_description = "what the title says"
 rarity = 2
-effect_scene = ExtResource("1_sl4ut")
+effect_scene = ExtResource("1_l1fu5")

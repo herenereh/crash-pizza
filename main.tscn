@@ -12,7 +12,7 @@
 [ext_resource type="Script" path="res://perk_system/data/perk_data.gd" id="10_gjpvt"]
 [ext_resource type="Resource" uid="uid://ciumqs5yfdxnc" path="res://perk_system/data/infinite_jumps.tres" id="11_pf4ll"]
 [ext_resource type="Resource" uid="uid://f5wisyvdaii5" path="res://perk_system/data/dash_resets_jump.tres" id="12_gwq4w"]
-[ext_resource type="Resource" uid="uid://e3cjkkxh4d6j" path="res://perk_system/data/mock_perk.tres" id="13_ie2a4"]
+[ext_resource type="Resource" uid="uid://c3nkwq0mteaim" path="res://perk_system/data/dash_overcharge.tres" id="13_15ih6"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o54hu"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -41,8 +41,8 @@ size = Vector3(60, 2, 60)
 render_priority = 0
 shader = ExtResource("1_33jk7")
 shader_parameter/affine_mapping = false
-shader_parameter/alpha_scissor = 0.5
-shader_parameter/jitter = 0.37
+shader_parameter/alpha_scissor = 0.602
+shader_parameter/jitter = 0.0
 shader_parameter/resolution = Vector2i(320, 240)
 
 [sub_resource type="BoxMesh" id="BoxMesh_vj5sf"]
@@ -173,4 +173,4 @@ script = ExtResource("5_ll8i3")
 
 [node name="PerkManager" type="Node" parent="."]
 script = ExtResource("7_k3lev")
-perk_pool = Array[ExtResource("10_gjpvt")]([ExtResource("11_pf4ll"), ExtResource("12_gwq4w"), ExtResource("13_ie2a4"), ExtResource("11_pf4ll")])
+perk_pool = Array[ExtResource("10_gjpvt")]([ExtResource("12_gwq4w"), ExtResource("11_pf4ll"), ExtResource("13_15ih6")])

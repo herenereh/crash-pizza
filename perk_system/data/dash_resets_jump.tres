@@ -6,8 +6,8 @@
 
 [resource]
 script = ExtResource("1_it252")
-perk_name = "Dash Reset"
-perk_description = "Resets Dash"
+perk_name = "Dash Resets Jump"
+perk_description = "Dash Resets Jump"
 perk_icon = ExtResource("2_kgjem")
 rarity = 1
 effect_scene = ExtResource("1_to4h3")

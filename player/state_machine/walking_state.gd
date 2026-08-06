@@ -15,6 +15,7 @@ func _physics_update(delta: float) -> void:
 		switch_state.emit(dash)
 		return
 	if not player.is_on_floor():
+		player.JUMP_COUNT -= 1
 		switch_state.emit(mid_air)
 		return
 	if Input.is_action_just_pressed("Crouch") and player.direction != Vector3.ZERO:

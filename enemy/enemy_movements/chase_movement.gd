@@ -8,5 +8,5 @@ func _init(speed: float)->void:
 
 func move(enemy: BaseEnemy, player: Player)->void:
     var direction = (player.global_position - enemy.global_position).normalized()
-    enemy.velocity = direction * speed
+    enemy.velocity = direction * (speed + enemy.bonus_move_speed)
 

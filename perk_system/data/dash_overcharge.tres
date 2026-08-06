@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PerkData" load_steps=3 format=3 uid="uid://c3nkwq0mteaim"]
+
+[ext_resource type="PackedScene" uid="uid://dqb221a2mpx7o" path="res://perk_system/effects/dash_overcharge.tscn" id="1_lx44h"]
+[ext_resource type="Script" path="res://perk_system/data/perk_data.gd" id="1_qhuw2"]
+
+[resource]
+script = ExtResource("1_qhuw2")
+perk_name = "Dash Overcharge"
+perk_description = "Give bonus charges"
+rarity = 1
+effect_scene = ExtResource("1_lx44h")

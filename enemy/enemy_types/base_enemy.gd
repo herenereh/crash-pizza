@@ -5,6 +5,12 @@ var player: Player
 var movement: MovementStrategy
 var attack: AttackStrategy
 
+const BASE_MOVE_SPEED: float = 5.0
+var bonus_move_speed: float = 0.0
+
+func current_move_speed() -> float:
+	return BASE_MOVE_SPEED + bonus_move_speed
+
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("Player") as Player
 
