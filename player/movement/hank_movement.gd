@@ -274,3 +274,8 @@ func handle_slowdown(delta: float) -> void:
 	elif not is_on_floor():
 		Engine.time_scale = NORMAL_TIME
 		
+
+
+func die() -> void:
+	died.emit()
+	get_tree().reload_current_scene()

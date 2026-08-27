@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://dba0vxavhsjsb"]
+
+[ext_resource type="Script" path="res://enemy/enemy_types/pouncer_enemy.gd" id="1_n3b8i"]
+[ext_resource type="Script" path="res://perk_system/perk_component.gd" id="2_ay4gh"]
+[ext_resource type="Texture2D" uid="uid://ddo4c1dwu7utg" path="res://player/sprites/placeholderenemy.PNG" id="3_yv12i"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ttwnw"]
+
+[node name="Enemy" type="CharacterBody3D"]
+collision_layer = 4
+script = ExtResource("1_n3b8i")
+
+[node name="PerkComponent" type="Node" parent="."]
+script = ExtResource("2_ay4gh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_ttwnw")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, 0.351023, 0.0668064, 0)
+billboard = 1
+texture = ExtResource("3_yv12i")
