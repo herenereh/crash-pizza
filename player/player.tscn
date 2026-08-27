@@ -1,9 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://cu77gt7svgho1"]
+[gd_scene load_steps=16 format=3 uid="uid://cu77gt7svgho1"]
 
 [ext_resource type="Script" path="res://player/movement/hank_movement.gd" id="1_hg53x"]
 [ext_resource type="PackedScene" uid="uid://dwx4cfv345xgi" path="res://player/weapon/weapon.tscn" id="2_aqqd6"]
 [ext_resource type="Texture2D" uid="uid://ts7dgdewo11b" path="res://player/sprites/righthandempty.PNG" id="3_5jgme"]
-[ext_resource type="Script" path="res://player/hand_bobbing.gd" id="3_25oh5"]
+[ext_resource type="Script" path="res://player/movement/hand_bobbing.gd" id="3_25oh5"]
 [ext_resource type="Script" path="res://player/weapon/weapon_controller.gd" id="3_cqhk2"]
 [ext_resource type="Texture2D" uid="uid://cwdetj1vhveic" path="res://player/sprites/lefthandempty.PNG" id="4_l7o4h"]
 [ext_resource type="Script" path="res://player/state_machine/state_machine.gd" id="7_mb2l5"]
@@ -11,6 +11,8 @@
 [ext_resource type="Script" path="res://player/state_machine/mid_air_state.gd" id="9_jka7v"]
 [ext_resource type="Script" path="res://player/state_machine/dash_state.gd" id="10_nfykm"]
 [ext_resource type="Script" path="res://player/state_machine/on_wall_state.gd" id="11_kums3"]
+[ext_resource type="Script" path="res://player/state_machine/slide_state.gd" id="12_53mx4"]
+[ext_resource type="Script" path="res://perk_system/perk_component.gd" id="12_kx06q"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_l0rbx"]
 
@@ -114,3 +116,9 @@ script = ExtResource("10_nfykm")
 
 [node name="Wall" type="Node" parent="StateMachine"]
 script = ExtResource("11_kums3")
+
+[node name="Slide" type="Node" parent="StateMachine"]
+script = ExtResource("12_53mx4")
+
+[node name="PerkComponent" type="Node" parent="."]
+script = ExtResource("12_kx06q")

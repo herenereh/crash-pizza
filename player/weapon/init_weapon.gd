@@ -36,7 +36,7 @@ func equip(new_weapon: Weapon) -> void:
 func load_weapon() -> void:
 	if WEAPON_TYPE == null:
 		return
-	weapon_mesh.mesh = WEAPON_TYPE.weapon_mesh
+	weapon_mesh.mesh = WEAPON_TYPE.weapon_mesh #Assign the weapon mesh to the weapon-mesh-node
 	position = WEAPON_TYPE.position
 	rotation_degrees = WEAPON_TYPE.rotation
 	rest_position = WEAPON_TYPE.position

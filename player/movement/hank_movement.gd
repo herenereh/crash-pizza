@@ -1,4 +1,4 @@
-extends CharacterBody3D
+extends Entity
 
 class_name Player
 
@@ -27,7 +27,8 @@ const CROUCH_WEIGHT = 0.3
 
 
 #Jump
-var JUMP_COUNT = 2
+var JUMP_COUNT = 1
+var bonus_jumps: int = 0
 
 #Wall Movement
 var WALL_DETECTION = 2
@@ -54,9 +55,11 @@ var SlOW_TIMER = 0.0
 var SIDEWAYS_TILT = 0.0
 var NORMAL_TILT = 0.0
 
-var crouching_height = 1.0
-var standing_height = 2.0
+var SLIDE_SPEED = 30.0
+var crouching_height = 2.0
+var standing_height = 3.0
 var is_crouching = false
+
 
 @onready var state_machine = $StateMachine
 @onready var CURRENT_DASH: int = MIN_DASH
@@ -80,6 +83,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	update_direction()
+	crouching()
 	if not is_on_floor():
 		handle_slowdown(delta)
 	apply_head_tilt()
@@ -103,7 +107,11 @@ func apply_head_tilt() -> void:
 	head.rotation_degrees.z = lerp(head.rotation_degrees.z, SIDEWAYS_TILT, TILT_WEIGHT)
 	head.rotation_degrees.x = lerp(head.rotation_degrees.x, NORMAL_TILT, TILT_WEIGHT)
 
+func max_air_jumps() -> int:
+	return 1 + bonus_jumps
 
+func refill_jumps() -> void:
+	JUMP_COUNT = max_air_jumps()
 
 func apply_ground_movement(delta: float) -> void:
 	if is_dashing:
@@ -193,7 +201,7 @@ func apply_gravity(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 func reset_ground_vars() -> void:
-	JUMP_COUNT = 1
+	refill_jumps()
 	SlOW_TIMER = 0.0
 	is_slowdown = false
 	Engine.time_scale = NORMAL_TIME
@@ -203,6 +211,12 @@ func try_dash() -> bool:
 	if Input.is_action_just_pressed("Dash") and direction != Vector3.ZERO:
 		return true
 	return false
+
+func add_dash_charge(amount: float) -> void:
+	CURRENT_DASH = clamp(CURRENT_DASH + amount, MIN_DASH, MAX_DASH)
+
+func drain_dash(amount: float) -> void:
+	CURRENT_DASH = clamp(CURRENT_DASH - amount, MIN_DASH, MAX_DASH)
 
 func try_jump() -> bool:
 	if Input.is_action_just_pressed("Jump") and JUMP_COUNT > 0:
@@ -216,19 +230,20 @@ func try_wall_jump() -> bool:
 	if JUMP_COUNT <= 0 or not is_on_wall() or is_on_floor():
 		return false
 	var wall_normal := get_wall_normal()
+	print("wall_jump attempt: wall_normal=", wall_normal, " last_wall_normal=", last_wall_normal, " dot=", wall_normal.dot(last_wall_normal))
 	if last_wall_normal != Vector3.ZERO:
 		if wall_normal.dot(last_wall_normal) > 0.9:
+			print("wall_jump BLOCKED (same wall)")
 			return false
 	velocity.y = JUMP_VELOCITY * 1.5
-	JUMP_COUNT -=1
 	last_wall_normal = wall_normal
+	print("wall_jump ALLOWED, last_wall_normal set to ", last_wall_normal)
 	return true
 
 func crouching() -> void:
-	if Input.is_action_pressed("Crouch"):
-		camera.position.y = lerp(camera.position.y, crouching_height, CROUCH_WEIGHT)
-	else:
-		camera.position.y = lerp(camera.position.y, standing_height, CROUCH_WEIGHT)
+	var target_height = crouching_height if is_crouching else standing_height
+	camera.position.y = lerp(camera.position.y, target_height, CROUCH_WEIGHT)
+
 
 func wall_detection() -> void:
 	RIGHT_RAYCAST.target_position = head.transform.basis.x.normalized() * WALL_DETECTION
@@ -245,8 +260,6 @@ func wall_detection() -> void:
 		head.rotation.z = lerp(head.rotation.z, -WALL_TILT, WALL_TILT_WEIGHT)
 	elif FORWARD_RAYCAST.is_colliding() or BACKWARD_RAYCAST.is_colliding():
 		pass
-	if not is_on_wall():
-		last_wall_normal = Vector3.ZERO
 
 
 func handle_slowdown(delta: float) -> void:
@@ -261,3 +274,8 @@ func handle_slowdown(delta: float) -> void:
 	elif not is_on_floor():
 		Engine.time_scale = NORMAL_TIME
 		
+
+
+func die() -> void:
+	died.emit()
+	get_tree().reload_current_scene()

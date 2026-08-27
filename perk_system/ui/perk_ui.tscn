@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgcsspivyifm3"]
+
+[ext_resource type="Script" path="res://perk_system/ui/perk_ui.gd" id="1_c8ous"]
+[ext_resource type="PackedScene" uid="uid://5nvtpvu5dpl" path="res://perk_system/ui/perk_card.tscn" id="2_ao21b"]
+
+[node name="Perk UI" type="CanvasLayer" groups=["PerkUI"]]
+script = ExtResource("1_c8ous")
+
+[node name="PerkPanel" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CardContainer" type="HBoxContainer" parent="PerkPanel"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 601.0
+offset_top = 411.0
+offset_right = 1301.0
+offset_bottom = 655.0
+theme_override_constants/separation = 50
+
+[node name="PerkCard" parent="PerkPanel/CardContainer" instance=ExtResource("2_ao21b")]
+layout_mode = 2
+
+[node name="PerkCard2" parent="PerkPanel/CardContainer" instance=ExtResource("2_ao21b")]
+layout_mode = 2
+
+[node name="PerkCard3" parent="PerkPanel/CardContainer" instance=ExtResource("2_ao21b")]
+layout_mode = 2

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dn6hgcukdrsde"]
+
+[ext_resource type="Script" path="res://perk_system/effects/infinite_jumps.gd" id="1_6auac"]
+
+[node name="infinite_jumps" type="Node"]
+script = ExtResource("1_6auac")
