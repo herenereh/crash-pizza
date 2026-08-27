@@ -75,13 +75,47 @@ func _shoot_ray(weapon: Weapon, marker: Marker3D, direction: Vector3) -> void:
 	var query := PhysicsRayQueryParameters3D.create(origin, end)
 	query.collide_with_areas = false
 	var hit := space_state.intersect_ray(query)
+	_spawn_tracer(origin, hit.position if not hit.is_empty() else end, weapon.tracer_color)
 	if hit.is_empty():
 		return
 	var target : Object = hit.collider
+
+
 	if target.collision_layer == LAYER_WORLD:
 		print("hit world")
 	elif target.collision_layer == LAYER_ENEMY:
 		print("hit enemy")
+		if target is Entity:
+			var entity := target as Entity
+			entity.take_damage(weapon.damage)
+			print("Dealt %s damage — enemy health now %s/%s" % [weapon.damage, entity.health, entity.max_health])
 	elif target.collision_layer == LAYER_PICKUPS:
 		print("hit pickup")
-	print("hit!")
+
+func _spawn_tracer(from: Vector3, to: Vector3, color: Color) -> void:
+	var length := from.distance_to(to)
+	if length <= 0.001:
+		return
+	var direction := (to - from) / length
+
+	var cylinder := CylinderMesh.new()
+	cylinder.top_radius = 0.02
+	cylinder.bottom_radius = 0.02
+	cylinder.height = length
+
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.albedo_color = color
+	material.emission_enabled = true
+	material.emission = color
+
+	var tracer := MeshInstance3D.new()
+	tracer.mesh = cylinder
+	tracer.material_override = material
+	get_tree().current_scene.add_child(tracer)
+	tracer.global_position = from + direction * (length / 2.0)
+	tracer.global_basis = Basis(Quaternion(Vector3.UP, direction))
+
+	await get_tree().create_timer(0.05).timeout
+	if is_instance_valid(tracer):
+		tracer.queue_free()

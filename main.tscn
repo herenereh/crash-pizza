@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bsrnjoc0qrkuv"]
+[gd_scene load_steps=31 format=3 uid="uid://bsrnjoc0qrkuv"]
 
 [ext_resource type="PackedScene" uid="uid://cu77gt7svgho1" path="res://player/player.tscn" id="1_7pcxd"]
 [ext_resource type="Shader" path="res://shaders/ps1.gdshader" id="1_33jk7"]
@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cgirf88ifvn54" path="res://gui/3D_ui_model.tscn" id="3_h86la"]
 [ext_resource type="PackedScene" uid="uid://dgcsspivyifm3" path="res://perk_system/ui/perk_ui.tscn" id="5_ito1d"]
 [ext_resource type="Script" path="res://perk_system/event_bus.gd" id="5_ll8i3"]
-[ext_resource type="PackedScene" uid="uid://c8btxse0w341i" path="res://enemy.tscn" id="6_jy0b0"]
+[ext_resource type="PackedScene" uid="uid://c8btxse0w341i" path="res://enemy/enemy.tscn" id="6_jy0b0"]
 [ext_resource type="Script" path="res://perk_system/perk_manager.gd" id="7_k3lev"]
 [ext_resource type="Script" path="res://gui/debug_interface.gd" id="9_4c2so"]
 [ext_resource type="Script" path="res://perk_system/data/perk_data.gd" id="10_gjpvt"]
@@ -57,6 +57,28 @@ points = PackedVector3Array(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5
 
 [sub_resource type="LabelSettings" id="LabelSettings_tms1c"]
 font_size = 41
+
+[sub_resource type="Gradient" id="Gradient_vmy1s"]
+interpolation_color_space = 1
+offsets = PackedFloat32Array(0.192029, 0.40942, 0.65942, 0.84058, 0.960145)
+colors = PackedColorArray(0, 0, 0.611765, 1, 0, 0.482353, 0.462745, 1, 0.156863, 0.968627, 0.968627, 1, 0.540594, 1, 0.568877, 1, 0.977025, 0.977025, 0.977025, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_r77fq"]
+gradient = SubResource("Gradient_vmy1s")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yp0yt"]
+render_priority = 0
+shader = ExtResource("1_33jk7")
+shader_parameter/affine_mapping = false
+shader_parameter/alpha_scissor = 0.665
+shader_parameter/jitter = 0.392
+shader_parameter/resolution = Vector2i(320, 240)
+shader_parameter/albedo = SubResource("GradientTexture1D_r77fq")
+
+[sub_resource type="BoxMesh" id="BoxMesh_cmsss"]
+material = SubResource("ShaderMaterial_yp0yt")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p3gle"]
 
 [node name="Main" type="Node3D"]
 
@@ -164,9 +186,8 @@ player = NodePath("../../Player")
 
 [node name="Player" parent="." groups=["Player"] instance=ExtResource("1_7pcxd")]
 
-[node name="Enemy" parent="." groups=["Enemies"] instance=ExtResource("6_jy0b0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.60077, -10.5462)
-collision_layer = 4
+[node name="BaseEnemy" parent="." groups=["Enemies"] instance=ExtResource("6_jy0b0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.38419e-07, 1.55024, -5.84928)
 
 [node name="EventBus" type="Node" parent="."]
 script = ExtResource("5_ll8i3")
@@ -174,3 +195,39 @@ script = ExtResource("5_ll8i3")
 [node name="PerkManager" type="Node" parent="."]
 script = ExtResource("7_k3lev")
 perk_pool = Array[ExtResource("10_gjpvt")]([ExtResource("12_gwq4w"), ExtResource("11_pf4ll"), ExtResource("13_15ih6")])
+
+[node name="Border" type="StaticBody3D" parent="."]
+transform = Transform3D(0.855, 0, 0, 0, 7.105, 0, 0, 0, 100, -59.7165, 3.48201, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Border"]
+mesh = SubResource("BoxMesh_cmsss")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Border"]
+shape = SubResource("BoxShape3D_p3gle")
+
+[node name="Border2" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.00128336, 0, -119.385, 0, 7.105, 0, 0.854999, 0, -0.179198, 0.0305901, 3.48201, -46.39)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Border2"]
+mesh = SubResource("BoxMesh_cmsss")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Border2"]
+shape = SubResource("BoxShape3D_p3gle")
+
+[node name="Border3" type="StaticBody3D" parent="."]
+transform = Transform3D(0.00368583, 0, -119.389, 0, 7.105, 0, 0.854992, 0, 0.514679, 1.24081, 3.48201, 46.6238)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Border3"]
+mesh = SubResource("BoxMesh_cmsss")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Border3"]
+shape = SubResource("BoxShape3D_p3gle")
+
+[node name="Border4" type="StaticBody3D" parent="."]
+transform = Transform3D(0.855, 0, 0, 0, 7.105, 0, 0, 0, 100, 59.8536, 3.48201, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Border4"]
+mesh = SubResource("BoxMesh_cmsss")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Border4"]
+shape = SubResource("BoxShape3D_p3gle")
