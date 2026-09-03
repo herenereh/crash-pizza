@@ -5,7 +5,7 @@ extends Node3D
 
 @onready var preview_camera: Camera3D = $Window/Previewport/Camera3D
 
-var player:	Player
+var player: Player
 
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("Player") as Player

@@ -9,6 +9,8 @@ extends Node3D
 const OPEN_ITEMS := [0, 1, 2]
 
 @export var material: Material
+@export var ceiling_material: Material
+@export var floor_material: Material
 
 func set_start(_val: bool) -> void:
 	if Engine.is_editor_hint():
@@ -26,44 +28,71 @@ func build_mesh() -> void:
 		remove_child(c)
 		c.queue_free()
 
-	var st := SurfaceTool.new()
-	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var wall := SurfaceTool.new()
+	var ceiling := SurfaceTool.new()
+	var floors := SurfaceTool.new()
+	
+	ceiling.begin(Mesh.PRIMITIVE_TRIANGLES)
+	floors.begin(Mesh.PRIMITIVE_TRIANGLES)
+	wall.begin(Mesh.PRIMITIVE_TRIANGLES)
+
+	var floor_faces : int = 0 
+	var ceiling_faces : int = 0
+	var wall_faces : int = 0
 
 	for cell in grid_map.get_used_cells():
 		if not _is_open(cell):
 			continue
 		var base := Vector3(cell)
 
-		if not _is_open(cell + Vector3i.DOWN):
-			_add_floor(st, base)
-		if not _is_open(cell + Vector3i.UP):
-			_add_ceiling(st, base)
-		if not _is_open(cell + Vector3i.FORWARD):
-			_add_wall_neg_z(st, base)
-		if not _is_open(cell + Vector3i.BACK):
-			_add_wall_pos_z(st, base)
-		if not _is_open(cell + Vector3i.LEFT):
-			_add_wall_neg_x(st, base)
-		if not _is_open(cell + Vector3i.RIGHT):
-			_add_wall_pos_x(st, base)
 
-	st.generate_normals()
-	var mesh := st.commit()
-	if mesh.get_surface_count() == 0:
-		push_warning("FacilityMesh: no open cells found, nothing to build.")
-		return
+## Checking the neighbours
+		if not _is_open(cell + Vector3i.DOWN):
+			_add_floor(floors, base)
+			floor_faces += 1
+		if not _is_open(cell + Vector3i.UP):
+			_add_ceiling(ceiling, base)
+			ceiling_faces += 1
+		if not _is_open(cell + Vector3i.FORWARD):
+			_add_wall_neg_z(wall, base)
+			wall_faces += 1
+		if not _is_open(cell + Vector3i.BACK):
+			_add_wall_pos_z(wall, base)
+			wall_faces += 1
+		if not _is_open(cell + Vector3i.LEFT):
+			_add_wall_neg_x(wall, base)
+			wall_faces += 1
+		if not _is_open(cell + Vector3i.RIGHT):
+			_add_wall_pos_x(wall, base)
+			wall_faces += 1
+
+	var arr_mesh := ArrayMesh.new()
+
+	if floor_faces > 0:
+		floors.generate_normals()
+		floors.commit(arr_mesh)
+		arr_mesh.surface_set_material(arr_mesh.get_surface_count() - 1, floor_material)
+
+	if ceiling_faces > 0:
+		ceiling.generate_normals()
+		ceiling.commit(arr_mesh)
+		arr_mesh.surface_set_material(arr_mesh.get_surface_count() - 1, ceiling_material)
+
+	if wall_faces > 0:
+		wall.generate_normals()
+		wall.commit(arr_mesh)
+		arr_mesh.surface_set_material(arr_mesh.get_surface_count() - 1, material)
+
 
 	var mesh_instance := MeshInstance3D.new()
 	mesh_instance.name = "GeneratedMesh"
-	mesh_instance.mesh = mesh
-	if material:
-		mesh_instance.material_override = material
+	mesh_instance.mesh = arr_mesh
 	add_child(mesh_instance)
 
 	var static_body := StaticBody3D.new()
 	static_body.name = "GeneratedCollision"
 	var collision_shape := CollisionShape3D.new()
-	collision_shape.shape = mesh.create_trimesh_shape()
+	collision_shape.shape = arr_mesh.create_trimesh_shape()
 	static_body.add_child(collision_shape)
 	add_child(static_body)
 
