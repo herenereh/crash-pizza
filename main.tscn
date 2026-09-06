@@ -13,18 +13,18 @@
 [ext_resource type="Resource" uid="uid://f5wisyvdaii5" path="res://perk_system/data/dash_resets_jump.tres" id="12_gwq4w"]
 [ext_resource type="Resource" uid="uid://c3nkwq0mteaim" path="res://perk_system/data/dash_overcharge.tres" id="13_15ih6"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o54hu"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dnu71"]
 
-[sub_resource type="Sky" id="Sky_fjtha"]
-sky_material = SubResource("ProceduralSkyMaterial_o54hu")
+[sub_resource type="Sky" id="Sky_hnlde"]
+sky_material = SubResource("ProceduralSkyMaterial_dnu71")
 
-[sub_resource type="Environment" id="Environment_6cted"]
+[sub_resource type="Environment" id="Environment_pasu8"]
 background_mode = 2
-sky = SubResource("Sky_fjtha")
-tonemap_mode = 2
-glow_enabled = true
+sky = SubResource("Sky_hnlde")
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_v2yld"]
+
+[sub_resource type="Compositor" id="Compositor_vb410"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_30qic"]
 size = Vector3(60, 2, 60)
@@ -81,8 +81,10 @@ material = SubResource("ShaderMaterial_yp0yt")
 
 [node name="Main" type="Node3D" unique_id=1502920476]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2014377961]
-environment = SubResource("Environment_6cted")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1095582702]
+environment = SubResource("Environment_pasu8")
+camera_attributes = SubResource("CameraAttributesPhysical_v2yld")
+compositor = SubResource("Compositor_vb410")
 
 [node name="Environment" type="Node" parent="." unique_id=1992432578]
 
