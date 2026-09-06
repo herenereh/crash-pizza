@@ -1,27 +1,13 @@
-[gd_resource type="Resource" script_class="Weapon" load_steps=3 format=3 uid="uid://bomype6w5u0yk"]
+[gd_resource type="Resource" script_class="Weapon" format=3 uid="uid://bomype6w5u0yk"]
 
-[ext_resource type="Script" path="res://player/weapon/weapon_data.gd" id="1_yp47g"]
+[ext_resource type="Script" uid="uid://calu68ncns37i" path="res://player/weapon/weapon_data.gd" id="1_yp47g"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_32i1e"]
 size = Vector3(0.22, 0.225, 1)
 
 [resource]
 script = ExtResource("1_yp47g")
-weapon_name = "Pistol"
-damage = 10.0
-fire_rate = 5.0
-max_range = 100.0
-spread_degrees = 0.0
-pellet_count = 1
-automatic = false
-is_melee_weapon = false
-can_pierce = false
 weapon_mesh = SubResource("BoxMesh_32i1e")
-position = Vector3(0, 0, 0)
-rotation = Vector3(0, 0, 0)
-tracer_color = Color(1, 1, 0, 1)
-sway_min = Vector2(0.05, 0.05)
-sway_max = Vector2(0.1, 0.1)
 sway_speed_position = 0.25
 sway_speed_rotation = 0.25
 sway_amount_position = 0.25

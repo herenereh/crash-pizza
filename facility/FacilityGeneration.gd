@@ -1,4 +1,4 @@
-@tool 
+@tool
 extends Node3D
 
 @onready var grid_map : GridMap = $GridMap
@@ -6,6 +6,10 @@ extends Node3D
 @export var start: bool = false : set  = set_start
 func set_start(_val:bool)->void:
 	generate()
+
+func _ready() -> void:
+	if not Engine.is_editor_hint():
+		generate()
 
 @export_range(0,1) var survival_chance : float = 0.25
 @export var room_number :int =4 
@@ -15,6 +19,11 @@ func set_start(_val:bool)->void:
 @export var min_room_size: int = 2
 @export var max_room_height: int = 4
 @export var min_room_height: int = 2
+@export_multiline var custom_seed : String = "" : set = set_seed
+
+func set_seed(val:String) -> void:
+	custom_seed = val
+	seed(val.hash())
 
 var room_tiles: Array[PackedVector3Array] = []
 var room_positions: PackedVector3Array = []
@@ -47,6 +56,7 @@ func visualize_border():
 func generate():
 	room_tiles.clear()
 	room_positions.clear()
+	if custom_seed : set_seed(custom_seed)
 	visualize_border()
 	for i in room_number:
 		make_room(room_recursion)

@@ -1,31 +1,30 @@
-[gd_scene load_steps=31 format=3 uid="uid://bsrnjoc0qrkuv"]
+[gd_scene format=3 uid="uid://bsrnjoc0qrkuv"]
 
 [ext_resource type="PackedScene" uid="uid://cu77gt7svgho1" path="res://player/player.tscn" id="1_7pcxd"]
-[ext_resource type="Shader" path="res://shaders/ps1.gdshader" id="1_33jk7"]
-[ext_resource type="Script" path="res://gui/dash_bar.gd" id="2_wexk0"]
-[ext_resource type="PackedScene" uid="uid://cgirf88ifvn54" path="res://gui/3D_ui_model.tscn" id="3_h86la"]
+[ext_resource type="Shader" uid="uid://skdjq5bfubyq" path="res://shaders/ps1.gdshader" id="1_33jk7"]
+[ext_resource type="Script" uid="uid://cqolmspfq7wnt" path="res://gui/dash_bar.gd" id="2_wexk0"]
 [ext_resource type="PackedScene" uid="uid://dgcsspivyifm3" path="res://perk_system/ui/perk_ui.tscn" id="5_ito1d"]
-[ext_resource type="Script" path="res://perk_system/event_bus.gd" id="5_ll8i3"]
+[ext_resource type="Script" uid="uid://cpqi2tkocr7m1" path="res://perk_system/event_bus.gd" id="5_ll8i3"]
 [ext_resource type="PackedScene" uid="uid://c8btxse0w341i" path="res://enemy/enemy.tscn" id="6_jy0b0"]
-[ext_resource type="Script" path="res://perk_system/perk_manager.gd" id="7_k3lev"]
-[ext_resource type="Script" path="res://gui/debug_interface.gd" id="9_4c2so"]
-[ext_resource type="Script" path="res://perk_system/data/perk_data.gd" id="10_gjpvt"]
+[ext_resource type="Script" uid="uid://bex81lcv15tc5" path="res://perk_system/perk_manager.gd" id="7_k3lev"]
+[ext_resource type="Script" uid="uid://c8yvyfh5dhpjk" path="res://gui/debug_interface.gd" id="9_4c2so"]
+[ext_resource type="Script" uid="uid://yos72surfjx4" path="res://perk_system/data/perk_data.gd" id="10_gjpvt"]
 [ext_resource type="Resource" uid="uid://ciumqs5yfdxnc" path="res://perk_system/data/infinite_jumps.tres" id="11_pf4ll"]
 [ext_resource type="Resource" uid="uid://f5wisyvdaii5" path="res://perk_system/data/dash_resets_jump.tres" id="12_gwq4w"]
 [ext_resource type="Resource" uid="uid://c3nkwq0mteaim" path="res://perk_system/data/dash_overcharge.tres" id="13_15ih6"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o54hu"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dnu71"]
 
-[sub_resource type="Sky" id="Sky_fjtha"]
-sky_material = SubResource("ProceduralSkyMaterial_o54hu")
+[sub_resource type="Sky" id="Sky_hnlde"]
+sky_material = SubResource("ProceduralSkyMaterial_dnu71")
 
-[sub_resource type="Environment" id="Environment_6cted"]
+[sub_resource type="Environment" id="Environment_pasu8"]
 background_mode = 2
-sky = SubResource("Sky_fjtha")
-tonemap_mode = 2
-glow_enabled = true
+sky = SubResource("Sky_hnlde")
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_v2yld"]
+
+[sub_resource type="Compositor" id="Compositor_vb410"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_30qic"]
 size = Vector3(60, 2, 60)
@@ -70,74 +69,76 @@ gradient = SubResource("Gradient_vmy1s")
 render_priority = 0
 shader = ExtResource("1_33jk7")
 shader_parameter/affine_mapping = false
+shader_parameter/albedo = SubResource("GradientTexture1D_r77fq")
 shader_parameter/alpha_scissor = 0.665
 shader_parameter/jitter = 0.392
 shader_parameter/resolution = Vector2i(320, 240)
-shader_parameter/albedo = SubResource("GradientTexture1D_r77fq")
 
 [sub_resource type="BoxMesh" id="BoxMesh_cmsss"]
 material = SubResource("ShaderMaterial_yp0yt")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_p3gle"]
 
-[node name="Main" type="Node3D"]
+[node name="Main" type="Node3D" unique_id=1502920476]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_6cted")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1095582702]
+environment = SubResource("Environment_pasu8")
+camera_attributes = SubResource("CameraAttributesPhysical_v2yld")
+compositor = SubResource("Compositor_vb410")
 
-[node name="Environment" type="Node" parent="."]
+[node name="Environment" type="Node" parent="." unique_id=1992432578]
 
-[node name="Ground" type="StaticBody3D" parent="Environment"]
+[node name="Ground" type="StaticBody3D" parent="Environment" unique_id=71934418]
 transform = Transform3D(2.00267, 0, 0, 0, 1, 0, 0, 0, 1.56749, 0, -1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ground"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ground" unique_id=1191571671]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0882998, -0.0119911, -0.415224)
 shape = SubResource("BoxShape3D_30qic")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Ground"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Ground" unique_id=1178648053]
 mesh = SubResource("BoxMesh_81bhi")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1808453044]
 transform = Transform3D(0.880181, 0.470091, -0.0655364, -0.160474, 0.424683, 0.891007, 0.446687, -0.77373, 0.449235, -5.96895, 24.6212, -21.1514)
 shadow_enabled = true
 shadow_bias = 0.15
 
-[node name="Wall2" type="StaticBody3D" parent="Environment"]
+[node name="Wall2" type="StaticBody3D" parent="Environment" unique_id=1872551941]
 transform = Transform3D(2.42, 0, 0, 0, 17.6036, 0, 0, 0, 43.2422, 6, 3, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Wall2"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Wall2" unique_id=2060134376]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0218813, 0.303069, -0.198449)
 mesh = SubResource("BoxMesh_vj5sf")
 skeleton = NodePath("../../Wall2")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Wall2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Wall2" unique_id=821123015]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0208933, 0.286539, -0.186334)
 shape = SubResource("ConvexPolygonShape3D_o3x3a")
 
-[node name="Wall" type="StaticBody3D" parent="Environment"]
+[node name="Wall" type="StaticBody3D" parent="Environment" unique_id=132828819]
 transform = Transform3D(2.42, 0, 0, 0, 17.6036, 0, 0, 0, 70.0294, -6.469, 2.814, 1.26)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Wall"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Wall" unique_id=376380541]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0218813, 0.303069, -0.198449)
 mesh = SubResource("BoxMesh_vj5sf")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Wall"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Wall" unique_id=578171666]
 transform = Transform3D(1, 0, 0, 0, 1.6052, 0, 0, 0, 1, 0.0864613, -0.00195226, -0.186334)
 shape = SubResource("ConvexPolygonShape3D_o3x3a")
 
-[node name="DummyEnemy" type="StaticBody3D" parent="Environment"]
+[node name="DummyEnemy" type="StaticBody3D" parent="Environment" unique_id=131327390]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3784, 0, 0)
 collision_layer = 4
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/DummyEnemy"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/DummyEnemy" unique_id=762818495]
 mesh = SubResource("CylinderMesh_ssygh")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/DummyEnemy"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/DummyEnemy" unique_id=312610006]
 shape = SubResource("CylinderShape3D_lnjtu")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1808522848]
 
-[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer" node_paths=PackedStringArray("player")]
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer" unique_id=960975140 node_paths=PackedStringArray("player")]
 offset_left = 86.0
 offset_top = 1013.0
 offset_right = 445.0
@@ -147,32 +148,7 @@ show_percentage = false
 script = ExtResource("2_wexk0")
 player = NodePath("../../Player")
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer"]
-offset_left = 88.9999
-offset_top = 771.0
-offset_right = 601.005
-offset_bottom = 1283.0
-scale = Vector2(0.59, 0.59)
-
-[node name="SubViewport" type="SubViewport" parent="CanvasLayer/SubViewportContainer"]
-transparent_bg = true
-handle_input_locally = false
-render_target_update_mode = 4
-
-[node name="Node3D" type="Node3D" parent="CanvasLayer/SubViewportContainer/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0743117, 15.5607, 35.3142)
-
-[node name="3DUIContainer" type="Node3D" parent="CanvasLayer/SubViewportContainer/SubViewport/Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0927348, 0.287368, -1.10157)
-
-[node name="3DUI" parent="CanvasLayer/SubViewportContainer/SubViewport/Node3D/3DUIContainer" instance=ExtResource("3_h86la")]
-
-[node name="Camera3D" type="Camera3D" parent="CanvasLayer/SubViewportContainer/SubViewport/Node3D"]
-transform = Transform3D(0.999953, 0, -0.00968644, 0, 1, 0, 0.00968644, 0, 0.999953, 0.0617731, 1.27281, 1.72749)
-projection = 1
-size = 6.16155
-
-[node name="Label" type="Label" parent="CanvasLayer" node_paths=PackedStringArray("player")]
+[node name="Label" type="Label" parent="CanvasLayer" unique_id=1234514544 node_paths=PackedStringArray("player")]
 offset_left = 1336.0
 offset_top = 19.0
 offset_right = 1905.0
@@ -182,52 +158,52 @@ label_settings = SubResource("LabelSettings_tms1c")
 script = ExtResource("9_4c2so")
 player = NodePath("../../Player")
 
-[node name="Perk UI" parent="CanvasLayer" instance=ExtResource("5_ito1d")]
+[node name="Perk UI" parent="CanvasLayer" unique_id=1808423477 instance=ExtResource("5_ito1d")]
 
-[node name="Player" parent="." groups=["Player"] instance=ExtResource("1_7pcxd")]
+[node name="Player" parent="." unique_id=58520747 groups=["Player"] instance=ExtResource("1_7pcxd")]
 
-[node name="BaseEnemy" parent="." groups=["Enemies"] instance=ExtResource("6_jy0b0")]
+[node name="BaseEnemy" parent="." unique_id=198989291 groups=["Enemies"] instance=ExtResource("6_jy0b0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.38419e-07, 1.55024, -5.84928)
 
-[node name="EventBus" type="Node" parent="."]
+[node name="EventBus" type="Node" parent="." unique_id=466629817]
 script = ExtResource("5_ll8i3")
 
-[node name="PerkManager" type="Node" parent="."]
+[node name="PerkManager" type="Node" parent="." unique_id=922617630]
 script = ExtResource("7_k3lev")
 perk_pool = Array[ExtResource("10_gjpvt")]([ExtResource("12_gwq4w"), ExtResource("11_pf4ll"), ExtResource("13_15ih6")])
 
-[node name="Border" type="StaticBody3D" parent="."]
+[node name="Border" type="StaticBody3D" parent="." unique_id=914045920]
 transform = Transform3D(0.855, 0, 0, 0, 7.105, 0, 0, 0, 100, -59.7165, 3.48201, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Border"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Border" unique_id=1447136698]
 mesh = SubResource("BoxMesh_cmsss")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Border"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Border" unique_id=1441192464]
 shape = SubResource("BoxShape3D_p3gle")
 
-[node name="Border2" type="StaticBody3D" parent="."]
+[node name="Border2" type="StaticBody3D" parent="." unique_id=567934251]
 transform = Transform3D(-0.00128336, 0, -119.385, 0, 7.105, 0, 0.854999, 0, -0.179198, 0.0305901, 3.48201, -46.39)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Border2"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Border2" unique_id=263562082]
 mesh = SubResource("BoxMesh_cmsss")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Border2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Border2" unique_id=1304993711]
 shape = SubResource("BoxShape3D_p3gle")
 
-[node name="Border3" type="StaticBody3D" parent="."]
+[node name="Border3" type="StaticBody3D" parent="." unique_id=1344587607]
 transform = Transform3D(0.00368583, 0, -119.389, 0, 7.105, 0, 0.854992, 0, 0.514679, 1.24081, 3.48201, 46.6238)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Border3"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Border3" unique_id=2129323966]
 mesh = SubResource("BoxMesh_cmsss")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Border3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Border3" unique_id=396479311]
 shape = SubResource("BoxShape3D_p3gle")
 
-[node name="Border4" type="StaticBody3D" parent="."]
+[node name="Border4" type="StaticBody3D" parent="." unique_id=1592296669]
 transform = Transform3D(0.855, 0, 0, 0, 7.105, 0, 0, 0, 100, 59.8536, 3.48201, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Border4"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Border4" unique_id=1098663855]
 mesh = SubResource("BoxMesh_cmsss")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Border4"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Border4" unique_id=1720127370]
 shape = SubResource("BoxShape3D_p3gle")
